@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Dispatcher
+ * 
+ * La classe Dispatcher de charger le bon controller
+ * 
+ */
 class Dispatcher {
 
     public $request;
@@ -10,7 +16,12 @@ class Dispatcher {
         $this->loadController();
     }
 
-
+    
+    /**
+     * Instancie le controller correspondant à la page demandé
+     *
+     * @return void
+     */
     public function loadController() {
 
         $controller = ucfirst($this->request->controller);

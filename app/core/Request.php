@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Request
+ * 
+ * Permet de récuper l'url demandé Controller/Action/Param1/Param2/...
+ * 
+ */
 class Request {
 
     public $url;

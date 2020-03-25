@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Controller
+ */
 class Controller {
 
     public $request;

@@ -2,13 +2,13 @@
 
 class Database {
 
-    private static $instance = null;
+    private static $_instance = null;
 
     protected $pdo;
     protected $query;
     protected $results;
     protected $error = false;
-    protected $row_count;
+    protected $rowCount;
     protected $lastInsertedId;
 
 
@@ -23,11 +23,107 @@ class Database {
     }
 
     public static function getInstance() {
-        if(!isset(self::$instance)) {
-            self::$instance = new Database;
+        if(!isset(self::$_instance)) {
+            self::$_instance = new Database;
         }
 
-        return self::$instance;
+        return self::$_instance;
+    }
+
+
+    public function query($sql, $binds = array()) {
+        $this->error = false;
+
+        if($this->query = $this->pdo->prepare($sql)) {
+            if(!empty($binds)) {
+                $x = 1;
+                foreach($binds as $bind) {
+                    $this->query->bindValue($x++, $bind);
+                }
+            }
+        }
+
+        if($this->query->execute()) {
+            $this->results = $this->query;
+            $this->rowCount = $this->results->rowCount();
+            $this->lastInsertedId = $this->pdo->lastInsertId();
+        }
+
+        return $this;
+
+    }
+
+    private function _read($table, $params = array()) {
+
+        $conditionString = '';
+        $binds = [];
+        $group = '';
+        $order = '';
+        $limit = '';
+
+        if(!empty($params)) {
+            if(key_exists('conditions', $params)) {
+                $conditionString .= " WHERE ";
+                if(is_array($params['conditions'])) {
+                    foreach($params['conditions'] as $key => $value) {
+                        $conditionString .= $key . ' = \'' . $value . '\' AND ';
+                    }
+
+                    $conditionString = rtrim($conditionString, ' AND ');
+
+                }else {
+                    $conditionString .= $params['conditions'];
+                }
+            }
+
+            if(key_exists('bind', $params)) {
+                $binds = $params['bind'];
+            }
+
+            if(key_exists('group', $params)) {
+                $group = " GROUP BY ";
+                $group .= $params['group'];
+            }
+
+            if(key_exists('order', $params)) {
+                $order = " ORER BY ";
+                $order .= $params['order'];
+            }
+
+            if(key_exists('limit', $params)) {
+                $limit = " LIMIT ";
+                $limit .= $params['limit'];
+            }            
+        }
+        
+        $sql = "SELECT * FROM {$table}{$conditionString}{$group}{$order}{$limit}";
+        
+        return $this->query($sql, $binds);
+
+    }
+
+    public function find($table, $params = array()) {
+        return ($this->_read($table, $params)) ? $this->results()->fetchAll(PDO::FETCH_OBJ) : false;
+    }
+
+    public function findFirst($table, $params = array()) {
+        return ($this->_read($table, $params)) ? $this->results()->fetchAll(PDO::FETCH_OBJ)[0] : false;
+    }
+
+    public function results() {
+        return $this->results;
+    }
+
+    public function rowCount() {
+        return $this->rowCount();
+    }
+
+    public function lastInsertId() {
+        return $this->lastInsertedId;
+    }
+
+    public function error() {
+        return $this->error;
     }
 
 }
