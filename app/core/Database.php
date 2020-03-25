@@ -110,6 +110,10 @@ class Database {
         return ($this->_read($table, $params)) ? $this->results()->fetchAll(PDO::FETCH_OBJ)[0] : false;
     }
 
+    public function show_columns($table) {
+        return $this->query("SHOW COLUMNS FROM {$table}")->results()->fetchAll(PDO::FETCH_OBJ);
+    }
+
     public function results() {
         return $this->results;
     }
