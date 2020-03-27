@@ -1,8 +1,8 @@
 <?php
 
+namespace Enway\App\Core;
+
 /**
- * Request
- * 
  * Permet de récuper l'url demandé Controller/Action/Param1/Param2/...
  * 
  */

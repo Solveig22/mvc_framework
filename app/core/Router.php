@@ -1,5 +1,7 @@
 <?php
 
+namespace Enway\App\Core;
+
 /**
  * Router
  * 

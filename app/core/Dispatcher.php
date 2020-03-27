@@ -1,5 +1,7 @@
 <?php
 
+namespace Enway\App\Core;
+
 /**
  * Dispatcher
  * 
@@ -29,9 +31,10 @@ class Dispatcher {
         $file = APP . DS . 'controllers' . DS . $controller . '.php';
 
         if (file_exists($file)) {
+            $controller = "Enway\\App\\Controller\\" . $controller;
             $controller = new $controller($this->request);
 
-            if (method_exists($this->request->controller, $this->request->action)) {
+            if (method_exists($controller, $this->request->action)) {
                 call_user_func_array(array($controller, $this->request->action), $this->request->params);
             } else {
                 die("Le controller " . $this->request->controller . " ne possède pas de méthode " . $this->request->action);

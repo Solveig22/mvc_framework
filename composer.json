@@ -1,0 +1,19 @@
+{
+    "name": "enway/mvc",
+    "description": "Framework php",
+    "authors": [
+        {
+            "name": "Namous Yesmine",
+            "email": "namous2209@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Enway\\App\\": "app/",
+            "Enway\\App\\Controller\\": "app/controllers/",
+            "Enway\\App\\Core\\": "app/core/",
+            "Enway\\App\\Models\\": "app/models/"
+        }
+    },
+    "require": {}
+}

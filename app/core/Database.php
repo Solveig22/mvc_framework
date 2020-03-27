@@ -1,5 +1,10 @@
 <?php
 
+namespace Enway\App\Core;
+
+use PDO;
+use PDOException;
+
 class Database {
 
     private static $_instance = null;
@@ -47,6 +52,8 @@ class Database {
             $this->results = $this->query;
             $this->rowCount = $this->results->rowCount();
             $this->lastInsertedId = $this->pdo->lastInsertId();
+        }else {
+            $this->error = true;
         }
 
         return $this;
@@ -108,6 +115,53 @@ class Database {
 
     public function findFirst($table, $params = array()) {
         return ($this->_read($table, $params)) ? $this->results()->fetchAll(PDO::FETCH_OBJ)[0] : false;
+    }
+
+
+    public function insert($table, array $params) {
+
+        $fields = '';
+        $values = '';
+        $binds = [];
+
+        foreach($params as $field => $value) {
+            $fields .= '`' . $field . '`, ';
+            $values .= '?, ';
+            $binds[] = $value;
+        }
+ 
+        $fields = rtrim($fields, ', ');
+        $values = rtrim($values, ', ');
+
+
+        $sql = "INSERT INTO {$table} ($fields) VALUES ($values)";
+
+        return !$this->query($sql, $binds)->error();
+    }
+
+    public function update($table, $id, $params) {
+
+        $set = '';
+        $binds = [];
+
+        foreach($params as $field => $value) {
+            $set .= '`' . $field . '` = ?, ';
+            $binds[] = $value;
+        }
+
+        $set = rtrim($set, ', ');
+
+
+        $sql = "UPDATE {$table} SET {$set} WHERE id = {$id}";
+
+        return !$this->query($sql, $binds)->error();
+
+    }
+
+    public function delete($table, $id) {
+        $sql = "DELETE FROM {$table} WHERE id = {$id}";
+        
+        return !$this->query($sql)->error();
     }
 
     public function show_columns($table) {
