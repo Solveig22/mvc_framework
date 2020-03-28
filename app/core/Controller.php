@@ -20,8 +20,8 @@ class Controller {
 
         if(file_exists($file)) {
             $model = strtolower($model);
-            $model = "Enway\\App\\Models\\" . $model;
-            $this->$model = new $model;
+            $modelClass = "Enway\\App\\Models\\" . $model;
+            $this->$model = new $modelClass;
         }else {
             die("Le model spécifié est introuvable!");
         }

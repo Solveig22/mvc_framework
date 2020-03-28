@@ -5,7 +5,7 @@ namespace Enway\App\Core;
 class Validate {
 
 
-    private $passed;
+    private $passed = true;
     private $errors = [];
     private $db;
 
@@ -14,7 +14,7 @@ class Validate {
         $this->db = Database::getInstance();
     }
 
-    public static function check($source, $items) {
+    public function check($source, $items) {
         $this->errors = [];
 
         foreach($items as $item => $rules) {
@@ -59,11 +59,21 @@ class Validate {
             }
         }
 
+        return empty($this->errors);
+
     }
 
-    protected function addError($error) {
+    public function addError($error) {
         $this->errors[] = $error;
         $this->passed = empty($error);
+    }
+
+    public function passed() {
+        return $this->passed;
+    }
+
+    public function errors() {
+        return $this->errors;
     }
 
 }

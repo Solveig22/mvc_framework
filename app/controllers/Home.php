@@ -9,11 +9,6 @@ class Home extends Controller{
 
     public function index() {
 
-        $db = Database::getInstance();
-        
-        
-        $this->loadModel('Article');
-        
         $this->view->render($this->request);
     }
 

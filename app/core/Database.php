@@ -114,7 +114,7 @@ class Database {
     }
 
     public function findFirst($table, $params = array()) {
-        return ($this->_read($table, $params)) ? $this->results()->fetchAll(PDO::FETCH_OBJ)[0] : false;
+        return ($this->_read($table, $params)->rowCount()) ? $this->results()->fetchAll(PDO::FETCH_OBJ)[0] : false;
     }
 
 
@@ -173,7 +173,7 @@ class Database {
     }
 
     public function rowCount() {
-        return $this->rowCount();
+        return $this->rowCount;
     }
 
     public function lastInsertId() {

@@ -40,8 +40,7 @@ class Model {
         $resultQuery = $this->db->findFirst($this->table, $params);
         $result = new $this->modelName;
         $result->_populateObjDatas($resultQuery);
-        
-        return $result;
+        return ($resultQuery) ? $result : false;
     }
 
 
@@ -57,8 +56,10 @@ class Model {
     }
 
     private function _populateObjDatas($datas) {
-        foreach($datas as $key => $val) {
-            $this->$key = $val;
+        if(is_object($datas)) {
+            foreach($datas as $key => $val) {
+                $this->$key = $val;
+            }
         }
     }
 
