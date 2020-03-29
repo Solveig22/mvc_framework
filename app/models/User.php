@@ -2,6 +2,7 @@
 
 namespace Enway\App\Models;
 
+use Enway\App\Core\Cookie;
 use Enway\App\Core\Model;
 use Enway\App\Core\Session;
 
@@ -26,6 +27,20 @@ class User extends Model{
 
     public function login($remember) {
         Session::set($this->sessionName, $this->id);
+        if($remember) {
+            $hash = uniqid();
+            $user_agent = Session::uagent_no_version();
+            Cookie::set($this->cookieName, $hash, REMEMBER_ME_COOKIE_EXPIRY);
+            $fields = [
+                'session' => $hash,
+                'user_agent' => $user_agent,
+                'user_id' => $this->id
+            ];
+
+            $this->db->query("DELETE FROM user_sessions WHERE user_id = ? AND user_agent = ?", [$this->id, $user_agent]);
+
+            $this->db->insert('user_sessions', $fields);
+        }
     }
 
 }

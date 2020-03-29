@@ -1,17 +1,7 @@
 <?php  $this->start('body'); ?>
 
-<?php if(isset($validation)): ?>
-<?php if(!empty($validation->errors())): ?>
-
-    <div class="alert alert-danger">
-        <?php foreach($validation->errors() as $error): ?>
-            <p><?= $error[0] ?></p>
-        <?php endforeach; ?>
-    </div>
-
-<?php endif; ?>
-<?php endif; ?>
-<div class="card w-50 mx-auto mt-5">
+<?= isset($this->displayErrors) ? $this->displayErrors : false ?>
+<div class="card w-50 mx-auto mt-5 border-primary">
     <div class="card-body">
         <h1 class="card-title display-5 text-center text-primary">Login</h1>
         <form action="#" method="post">

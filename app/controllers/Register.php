@@ -4,6 +4,7 @@ namespace Enway\App\Controller;
 
 use Enway\App\Core\Controller;
 use Enway\App\Core\Input;
+use Enway\App\Core\Router;
 use Enway\App\Core\Validate;
 
 class Register extends Controller {
@@ -15,7 +16,6 @@ class Register extends Controller {
 
     public function login() {
         if(isset($_POST) && !empty($_POST)) {
-            dump($_POST);
             $validation = new Validate;
 
             $validation->check($_POST, [
@@ -36,17 +36,27 @@ class Register extends Controller {
 
                 if($user && password_verify(Input::get('password'), $user->password)) {
                     $user->login($check);
-                    dump($_SESSION);
+                    Router::redirect('home/index');
                 }else {
                     $validation->addError(["Votre nom d'utilisateur ou votre mot de passe est incorrecte!"]);
                 }
                 
             }
             
-            $this->view->set('validation', $validation);
+            $this->view->displayErrors = $validation->displayErrors();
+
+        } 
+        if(empty($_SESSION)) {
+            $this->view->render($this->request);
+        }else {
+            Router::redirect('home/index');
         }
-        
-        $this->view->render($this->request);
+    }
+
+    public function logout() {
+        session_start();
+        session_destroy();
+        Router::redirect('home/index');
     }
 
 }

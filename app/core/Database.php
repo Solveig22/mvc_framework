@@ -133,9 +133,7 @@ class Database {
         $fields = rtrim($fields, ', ');
         $values = rtrim($values, ', ');
 
-
         $sql = "INSERT INTO {$table} ($fields) VALUES ($values)";
-
         return !$this->query($sql, $binds)->error();
     }
 

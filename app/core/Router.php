@@ -28,4 +28,10 @@ class Router {
         return true;
     }
 
+    public static function redirect($page) {
+        if(!headers_sent()) {
+            header('Location: ' . "http://127.0.0.1/mvc_framework/" . $page);
+        }
+    }
+
 }

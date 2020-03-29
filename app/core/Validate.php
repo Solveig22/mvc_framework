@@ -59,8 +59,11 @@ class Validate {
             }
         }
 
-        return empty($this->errors);
+        if(empty($this->errors())) {
+            $this->passed = true;
+        }
 
+        return $this;
     }
 
     public function addError($error) {
@@ -74,6 +77,16 @@ class Validate {
 
     public function errors() {
         return $this->errors;
+    }
+
+    public function displayErrors() {
+        $html = '<ul class="alert alert-danger w-50 mx-auto">';
+        foreach($this->errors as $error) {
+            $html .=  '<li>' . $error[0] . '</li>';
+        }
+        $html .= '</ul>';
+        
+        return $html;
     }
 
 }

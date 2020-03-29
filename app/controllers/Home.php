@@ -8,7 +8,6 @@ use Enway\App\Core\Database;
 class Home extends Controller{
 
     public function index() {
-
         $this->view->render($this->request);
     }
 

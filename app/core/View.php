@@ -15,13 +15,11 @@ class View {
     protected $outputBuffer;
     protected $layout = 'default';
     protected $page_title = DEFAULT_PAGE_TITLE;
-    protected $datas = array();
 
 
     public function render($request) {
         $file = APP.DS.'views'.DS.strtolower($request->controller).DS.$request->action.'.php';
         if(file_exists($file)) {
-            extract($this->datas);
             require_once($file);
             require_once(APP.DS.'views'.DS.'layouts'.DS.$this->layout.'.php');
         }else {
@@ -55,20 +53,6 @@ class View {
         }else {
             die("Veuillez démarrer la méthode start au préalable!");
         }
-    }
-    
-        
-    /**
-     * set
-     * 
-     * Permet d'envoyé des données à la vue
-     *
-     * @param  mixed $key
-     * @param  mixed $value
-     * @return void
-     */
-    public function set($key, $value) {
-        $this->datas[$key] = $value;
     }
 
     public function layout() {
